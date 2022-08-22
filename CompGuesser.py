@@ -16,12 +16,12 @@ def CompGuess(x, y, tajna, count):
             print(f"Gratulacje odgadłeś liczbę {tajna}")
 
 
-def SetIntInput(str):
+def GetIntInput(strin):
     isSet = False
     x = 0
-    while not(isSet):
+    while not isSet:
         try:
-            x = int(input(str))
+            x = int(input(strin))
         except ValueError:
             print("Invalid input")
         else:
@@ -31,11 +31,11 @@ def SetIntInput(str):
 
 def game():
     isSet = False
-    while not(isSet):
+    while not isSet:
         try:
-            x=SetIntInput("dolna wartość zakresu:")
-            y=SetIntInput("górna wartość zakresu:")
-            tajnaliczba=SetIntInput("Tajna liczba:")
+            x=GetIntInput("dolna wartość zakresu:")
+            y=GetIntInput("górna wartość zakresu:")
+            tajnaliczba=GetIntInput("Tajna liczba:")
             assert x <= tajnaliczba <= y
         except AssertionError:
             print("Próba oszukania komputera lub przejaw głupoty.\nProszę wprowadzić poprawne dane.")
