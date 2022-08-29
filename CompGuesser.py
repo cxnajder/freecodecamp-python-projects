@@ -2,8 +2,10 @@
 '''Computer Guesser'''
 
 from random import randint
+#import time
 
 def CompGuess(x, y, tajna, count):
+        #time.sleep(1)
         compguess = randint(x, y)
         print(f"CPU: Wybieram liczbę z zakresu <{x}, {y}> : {compguess}. (Próba nr: {count})")
         if compguess > tajna:
