@@ -4,7 +4,7 @@ class Gra:
     def __init__(self):
         self.plansza = [[" " for i in range(3)] for j in range(3)]
 
-    def pokażPlanszę(self):
+    def pokazPlansze(self):
         print("+---" * 3 + "+") # da to samo co: print("+---+---+---+")
         for i in range(3):
             print("|", end='')
@@ -28,13 +28,13 @@ class Gra:
         return False
 
     def wolnePola(self):
-        lista_pól = []
+        lista_pol = []
         for i in range(1,10):
             poziom = (i - 1) // 3
             pion = (i - 1) % 3
             if self.plansza[poziom][pion] == " ":
-                lista_pól.append(i)
-        return lista_pól
+                lista_pol.append(i)
+        return lista_pol
 
 
     def ustawPole(self, znak, poziom, pion):
@@ -51,15 +51,15 @@ class Gra:
             raise
     
     def zajetePrzezO(self):
-        zajępte_pola = []
+        zajepte_pola = []
         for i in range(1,10):
             poziom = (i - 1) // 3
             pion = (i - 1) % 3
             if self.plansza[poziom][pion] == 'o':
-                zajępte_pola.append(i)
-        return zajępte_pola
+                zajepte_pola.append(i)
+        return zajepte_pola
 
-    def czyJestZwycięzca(self, znak):
+    def czyJestZwyciezca(self, znak):
         for i in range(3):
             if self.plansza[i][0] == znak and self.plansza[i][1] == znak and self.plansza[i][2] == znak:
                 return True
@@ -71,53 +71,53 @@ class Gra:
                 return True
         return False
 
-    def rozpocznijGrę(self, tryb_gry = 1):
+    def rozpocznijGre(self, tryb_gry = 1):
         assert tryb_gry in [1, 2, 3] # dostepne są tylko 3 tryby gry!
         match tryb_gry:
             case 1:
-                self.gracz1 = gracz.GraczCzłowiek('o')
+                self.gracz1 = gracz.GraczCzlowiek('o')
                 self.gracz2 = gracz.GraczKomp('x')
             case 2:
-                self.gracz1 = gracz.GraczCzłowiek('o')
-                self.gracz2 = gracz.GraczCzłowiek('x')
+                self.gracz1 = gracz.GraczCzlowiek('o')
+                self.gracz2 = gracz.GraczCzlowiek('x')
             case 3:
                 self.gracz1 = gracz.GraczKomp('o')
                 self.gracz2 = gracz.GraczKomp('x')
         
         self.plansza = [[" " for i in range(3)] for j in range(3)] # wyczyszczenie planszy (na wszelki wypadek)
 
-        rozgrywający = self.gracz2
-        self.zwycięzca = None
-        numer_gracz_z_turą = 1
-        rozgrywający.WyborPodpowiedź()
+        rozgrywajacy = self.gracz2
+        self.zwyciezca = None
+        numer_gracz_z_tura = 1
+        rozgrywajacy.WyborPodpowiedz()
 
         while(self.czyJestMiejsce()):
-            if rozgrywający == self.gracz2:
-                rozgrywający = self.gracz1
+            if rozgrywajacy == self.gracz2:
+                rozgrywajacy = self.gracz1
             else:
-                rozgrywający = self.gracz2
+                rozgrywajacy = self.gracz2
 
-            udany_wybór = False
-            while not udany_wybór:
+            udany_wybor = False
+            while not udany_wybor:
                 try:
-                    print(f"Gracz {numer_gracz_z_turą}: ", end = "")
-                    znak, poziom, pion = rozgrywający.Wybor(self.wolnePola())
+                    print(f"Gracz {numer_gracz_z_tura}: ", end = "")
+                    znak, poziom, pion = rozgrywajacy.Wybor(self.wolnePola())
                     self.ustawPole(znak, poziom, pion)
-                    udany_wybór = True
+                    udany_wybor = True
                 except AssertionError:
-                    rozgrywający.WyborPodpowiedź(self.wolnePola(), self.zajetePrzezO())
+                    rozgrywajacy.WyborPodpowiedz(self.wolnePola(), self.zajetePrzezO())
                     print("Spróbuj jeszcze raz")
-            self.pokażPlanszę()
-            if self.czyJestZwycięzca(rozgrywający.znak):
-                self.zwycięzca = rozgrywający.znak
+            self.pokazPlansze()
+            if self.czyJestZwyciezca(rozgrywajacy.znak):
+                self.zwyciezca = rozgrywajacy.znak
                 break
-            numer_gracz_z_turą = numer_gracz_z_turą % 2
-            numer_gracz_z_turą += 1
+            numer_gracz_z_tura = numer_gracz_z_tura % 2
+            numer_gracz_z_tura += 1
 
-        if self.zwycięzca == None:
+        if self.zwyciezca == None:
             print("Remis")
         else:
-            print(f"Wygrywa gracz numer {numer_gracz_z_turą} (używający \'{self.zwycięzca}\')")
+            print(f"Wygrywa gracz numer {numer_gracz_z_tura} (używający \'{self.zwyciezca}\')")
 
 def tik_tak_toe():
     nowaGra = Gra()
@@ -129,26 +129,19 @@ def tik_tak_toe():
     print("| 3) "+"CPU vs CPU".center(30)+"    |")
     print("+" * 40)
     
-    poprawnyWybór = False
-    while not poprawnyWybór:
+    poprawnyWybor = False
+    while not poprawnyWybor:
         try:
             opcja = int(input("Wybierz opcje z zakresu (1-3): "))
             assert 1 <= opcja <= 3
-            poprawnyWybór = True
+            poprawnyWybor = True
         except AssertionError:
             print("Opcja z poza zakresu")
         except ValueError:
                 print("Niwłaściwy input")
 
-    nowaGra.rozpocznijGrę(opcja)
+    nowaGra.rozpocznijGre(opcja)
 
 if __name__ == "__main__":
 
     tik_tak_toe()
-    # nowaGra = Gra()
-    # nowaGra.rozpocznijGrę()
-
-
-    # print(nowaGra.gracz1)
-    # print(nowaGra.gracz2)
-    # print(nowaGra.zwycięzca)
