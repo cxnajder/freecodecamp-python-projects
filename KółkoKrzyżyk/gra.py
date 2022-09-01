@@ -50,8 +50,26 @@ class Gra:
             print("Pole jest już zajęte")
             raise
     
-    def czyJestZwycięzca(self):
-                return False
+    def zajetePrzezO(self):
+        zajępte_pola = []
+        for i in range(1,10):
+            poziom = (i - 1) // 3
+            pion = (i - 1) % 3
+            if self.plansza[poziom][pion] == 'o':
+                zajępte_pola.append(i)
+        return zajępte_pola
+
+    def czyJestZwycięzca(self, znak):
+        for i in range(3):
+            if self.plansza[i][0] == znak and self.plansza[i][1] == znak and self.plansza[i][2] == znak:
+                return True
+            if self.plansza[0][i] == znak and self.plansza[1][i] == znak and self.plansza[2][i] == znak:
+                return True
+            if self.plansza[0][2] == znak and self.plansza[1][1] == znak and self.plansza[2][0] == znak:
+                return True
+            if self.plansza[0][0] == znak and self.plansza[1][1] == znak and self.plansza[2][2] == znak:
+                return True
+        return False
 
     def rozpocznijGrę(self, tryb_gry = 1):
         assert tryb_gry in [1, 2, 3] # dostepne są tylko 3 tryby gry!
@@ -83,36 +101,23 @@ class Gra:
             while not udany_wybór:
                 try:
                     print(f"Gracz {numer_gracz_z_turą}: ", end = "")
-                    match tryb_gry:
-                        case 1: # gracz vs komp
-                            match numer_gracz_z_turą: 
-                                case 1: # tura gracza
-                                    znak, poziom, pion = rozgrywający.Wybor()
-                                case 2: # tura kompa
-                                    znak, poziom, pion = rozgrywający.Wybor(self.wolnePola())
-                        case 2: # gracz vs gracz
-                            znak, poziom, pion = rozgrywający.Wybor()
-                        case 3: # komp vs komp
-                            znak, poziom, pion = rozgrywający.Wybor(self.wolnePola())
+                    znak, poziom, pion = rozgrywający.Wybor(self.wolnePola())
                     self.ustawPole(znak, poziom, pion)
                     udany_wybór = True
                 except AssertionError:
-                    rozgrywający.WyborPodpowiedź()
+                    rozgrywający.WyborPodpowiedź(self.wolnePola(), self.zajetePrzezO())
                     print("Spróbuj jeszcze raz")
             self.pokażPlanszę()
-            if self.czyJestZwycięzca():
-                if numer_gracz_z_turą == 1:
-                    self.zwycięzca = 'o'
-                else:
-                    self.zwycięzca = 'x'
+            if self.czyJestZwycięzca(rozgrywający.znak):
+                self.zwycięzca = rozgrywający.znak
                 break
             numer_gracz_z_turą = numer_gracz_z_turą % 2
             numer_gracz_z_turą += 1
 
         if self.zwycięzca == None:
-            print("REMIS")
+            print("Remis")
         else:
-            print(f"Wygrywa gracz numer {numer_gracz_z_turą}, używający \'{self.zwycięzca}\'")
+            print(f"Wygrywa gracz numer {numer_gracz_z_turą} (używający \'{self.zwycięzca}\')")
 
 def tik_tak_toe():
     nowaGra = Gra()
