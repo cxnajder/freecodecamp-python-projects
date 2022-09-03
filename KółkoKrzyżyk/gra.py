@@ -73,6 +73,7 @@ class Gra:
 
     def rozpocznijGre(self, tryb_gry = 1):
         assert tryb_gry in [1, 2, 3] # dostepne są tylko 3 tryby gry!
+        gracz.Gracz.NowaGra()
         match tryb_gry:
             case 1:
                 self.gracz1 = gracz.GraczCzlowiek('o')
@@ -100,7 +101,7 @@ class Gra:
             udany_wybor = False
             while not udany_wybor:
                 try:
-                    print(f"Gracz {numer_gracz_z_tura}: ", end = "")
+                    print(f"{rozgrywajacy.nazwa}: ", end = "")
                     znak, poziom, pion = rozgrywajacy.Wybor(self.wolnePola())
                     self.ustawPole(znak, poziom, pion)
                     udany_wybor = True
@@ -109,7 +110,7 @@ class Gra:
                     print("Spróbuj jeszcze raz")
             self.pokazPlansze()
             if self.czyJestZwyciezca(rozgrywajacy.znak):
-                self.zwyciezca = rozgrywajacy.znak
+                self.zwyciezca = rozgrywajacy
                 break
             numer_gracz_z_tura = numer_gracz_z_tura % 2
             numer_gracz_z_tura += 1
@@ -117,12 +118,12 @@ class Gra:
         if self.zwyciezca == None:
             print("Remis")
         else:
-            print(f"Wygrywa gracz numer {numer_gracz_z_tura} (używający \'{self.zwyciezca}\')")
+            print(f"Wygrywa {self.zwyciezca.nazwa} (używający \'{self.zwyciezca.znak}\')")
 
 def tik_tak_toe():
     nowaGra = Gra()
 
-    # MENY:
+    # MENU:
     print("+" * 40)
     print("| 1) "+"Gracz vs CPU".center(30)+"    |")
     print("| 2) "+"Gracz vs Gracz".center(30)+"    |")

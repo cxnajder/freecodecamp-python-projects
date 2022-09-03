@@ -1,6 +1,26 @@
 class Gracz:
+    __licznik = 0
     def __init__(self, znak = 'o'):
-        self.znak = znak
+        self.__znak = znak
+        Gracz.__licznik += 1
+        self.__nazwa = f"Gracz {self.__licznik}"
+
+    @classmethod
+    def NowaGra(cls):
+        cls.__licznik = 0
+
+    @property
+    def nazwa(self):
+        return self.__nazwa
+
+    @property
+    def znak(self):
+        return self.__znak
+
+    def Wybor(self, wybrana_liczba):
+        poziom = (wybrana_liczba - 1) // 3
+        pion = (wybrana_liczba - 1) % 3
+        return (self.__znak, poziom, pion)
 
     def WyborPodpowiedz(self, lista_wolnych_pol = [i for i in range(1, 10)], zajete_przez_o = []):
         print("Numery pól do wyboru:")
@@ -36,9 +56,7 @@ class GraczCzlowiek (Gracz):
                 wybrana_liczba = int(input("Wybierz pole (1-9): "))
                 assert 1 <= wybrana_liczba <= 9, "Niewłaściwy zakres"
                 assert wybrana_liczba in lista_wolnych_pol
-                poziom = (wybrana_liczba - 1) // 3
-                pion = (wybrana_liczba - 1) % 3
-                return (self.znak, poziom, pion)
+                return super().Wybor(wybrana_liczba)
             except ValueError:
                 print("Niwłaściwy input")
             except AssertionError:
@@ -54,14 +72,17 @@ class GraczKomp (Gracz):
     def Wybor(self, lista_wolnych_pol = [i for i in range(1, 10)]):
         wybrana_liczba = random.choice(lista_wolnych_pol)
         print(f"Komputer wybrał pole {wybrana_liczba}")
-        poziom = (wybrana_liczba - 1) // 3
-        pion = (wybrana_liczba - 1) % 3
-        return (self.znak, poziom, pion)
+        return super().Wybor(wybrana_liczba)
 
 if __name__ == "__main__":
     gracz1 = GraczCzlowiek('x')
+    print(gracz1._Gracz__licznik)
     gracz1.WyborPodpowiedz()
     print(gracz1.Wybor())
 
     gracz2 = GraczKomp('o')
+    print(gracz2._Gracz__licznik)
     print(gracz2.Wybor())
+    print(Gracz._Gracz__licznik)
+    print(Gracz.NowaGra())
+    print(Gracz._Gracz__licznik)
